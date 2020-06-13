@@ -4,6 +4,8 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import {BrowserRouter as Router, Route} from "react-router-dom";
 
 import IndexPage from "./components/IndexPage"
+import UserNotFound from './components/UserNotFound';
+import UserStats from './components/UserStats';
 
 class App extends React.Component {
   
@@ -13,6 +15,8 @@ class App extends React.Component {
         <div className="container">
 
         <Route path="/" exact component={IndexPage} />
+        <Route path="/user-not-found" component={UserNotFound} />
+        <Route path="/user-found" component={UserStats} />
         </div>
       </Router>
     );
