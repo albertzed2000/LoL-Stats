@@ -17,7 +17,7 @@ export default class UserStats extends Component {
     }
 
     componentDidMount(){
-        //load stats into states
+        //load stats into state
 
     }
 
