@@ -13,7 +13,7 @@ export default class UserNotFound extends Component {
         return(
 
             <div>
-                the user was not found.
+                Sorry! This user doesn't exist! Try again.
             </div>
         )
     }
