@@ -47,7 +47,7 @@ export default class IndexPage extends Component {
 
         if(this.state.foundUser){
             console.log(this.state.foundUser); //debugging purposes
-            window.location = "/user/" + this.state.username;
+            window.location = "/user/" + this.state.encryptedSummonerId; //send user to their statspage with accountId param
         }
 
         else{
