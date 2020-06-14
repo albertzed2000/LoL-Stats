@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import axios from "axios";
 
 
 
@@ -18,7 +18,7 @@ export default class UserStats extends Component {
 
     componentDidMount(){
         //load stats into state
-
+        
     }
 
     render(){
@@ -26,8 +26,7 @@ export default class UserStats extends Component {
 
         return(
         <div>
-        user was found!
-        {this.state.encryptedSummonerId}
+        {this.state.username}
         </div>
 
         )
