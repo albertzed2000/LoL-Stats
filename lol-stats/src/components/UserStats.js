@@ -68,20 +68,29 @@ export default class UserStats extends Component {
         //get match history of players
         await axios.get('https://m6m1r9620d.execute-api.us-west-2.amazonaws.com/rgapi/matchlist/na1/' + this.state.accountId)
         .then(res => {
-            console.log(res.data["matches"][0]["platformId"]);
+            console.log(res.data["matches"][0]["platformId"]); //for debugging purposes
             
             if(res.data["matches"].length >=5){
                     this.setState({
-                    matches: res.data["matches"].slice(0, 5),
+                    matches: res.data["matches"].slice(0, 5), //get most recent 5 matches only (due to api rate limiting)
                 })
             }
-            else{
+            else{ //if user has played less than 5 games, store all of them in this.state.matches
                 this.setState({
                     matches: res.data["matches"],
                 })
             }
         })
-        console.log(this.state.matches);
+
+        await this.state.matches.forEach((match) => {
+            axios.get('https://m6m1r9620d.execute-api.us-west-2.amazonaws.com/rgapi/match/na1/' + match["gameId"])
+            .then(res => {
+                console.log(res.data);
+
+            });
+        });
+
+        console.log(this.state.matches); //debugging purposes
     }
 
     render(){
