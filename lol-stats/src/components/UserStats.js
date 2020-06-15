@@ -19,6 +19,7 @@ export default class UserStats extends Component {
             soloTier: "",
             flexRank: "",
             flexTier: "",
+            matches: [],
 
 
         }
@@ -59,6 +60,28 @@ export default class UserStats extends Component {
                 soloRank: res.data[0]["rank"],
             })
         })
+        .catch((err) => {
+            console.log(err);
+        })
+
+
+        //get match history of players
+        await axios.get('https://m6m1r9620d.execute-api.us-west-2.amazonaws.com/rgapi/matchlist/na1/' + this.state.accountId)
+        .then(res => {
+            console.log(res.data["matches"][0]["platformId"]);
+            
+            if(res.data["matches"].length >=5){
+                    this.setState({
+                    matches: res.data["matches"].slice(0, 5),
+                })
+            }
+            else{
+                this.setState({
+                    matches: res.data["matches"],
+                })
+            }
+        })
+        console.log(this.state.matches);
     }
 
     render(){
@@ -72,7 +95,7 @@ export default class UserStats extends Component {
         {this.state.accountId}<br/>
         {this.state.summonerId}<br/>
         Flex rank: {this.state.flexTier +  " " + this.state.flexRank}<br/>
-        Solo/duo rank: {this.state.soloTier + " " + this.state.soloRank}
+        Solo/duo rank: {this.state.soloTier + " " + this.state.soloRank}<br/>
         </div>
 
         )
