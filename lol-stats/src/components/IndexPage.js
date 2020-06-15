@@ -5,11 +5,10 @@ export default class IndexPage extends Component {
     constructor(props){
         super(props);
 
-        //initialize state with empty username, foundUser, encry
+        //initialize state with empty username, foundUser
         this.state = {
             username: "",
-            foundUser: false,
-            encryptedSummonerId: ""
+            foundUser: false
         }
 
         this.onSubmit = this.onSubmit.bind(this);
@@ -31,7 +30,7 @@ export default class IndexPage extends Component {
         await axios.get('https://m6m1r9620d.execute-api.us-west-2.amazonaws.com/rgapi/summoner/na1/' + this.state.username)
         .then(res => {
             console.log(res.data["accountId"]); //debugging purposes
-            this.setState({foundUser: true, encryptedSummonerId: res.data["accountId"]}); //set state to accountId
+            this.setState({foundUser: true}); //set state to accountId
         })
         .catch((err) => {
             console.log(err); //debugging purposes
@@ -47,7 +46,7 @@ export default class IndexPage extends Component {
 
         if(this.state.foundUser){
             console.log(this.state.foundUser); //debugging purposes
-            window.location = "/user/" + this.state.encryptedSummonerId; //send user to their statspage with accountId param
+            window.location = "/user/" + this.state.username; //send user to their statspage with accountId param
         }
 
         else{

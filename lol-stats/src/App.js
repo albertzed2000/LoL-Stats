@@ -16,7 +16,7 @@ class App extends React.Component {
 
         <Route path="/" exact component={IndexPage} />
         <Route path="/user-not-found" component={UserNotFound} />
-        <Route path="/user/:encryptedSummonerId" component={UserStats} />
+        <Route path="/user/:username" component={UserStats} />
         </div>
       </Router>
     );
