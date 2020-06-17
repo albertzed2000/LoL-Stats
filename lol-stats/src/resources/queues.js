@@ -1,4 +1,46 @@
-[
+
+export default function determineQueue(queueId){
+    //check which what gametype summoner is playing
+
+    for(let i = 0; i < queues.length; i++){
+
+         // eslint-disable-next-line
+        if(queueId == 420){
+            return "Ranked Solo/Duo"
+        }
+
+         // eslint-disable-next-line
+        else if(queueId == 430){
+            return "Classic Blind Pick"
+        }
+
+         // eslint-disable-next-line
+        else if(queueId == 440){
+            return "Ranked Flex"
+        }
+
+         // eslint-disable-next-line
+        else if(queueId == 400){
+            return "Classic Draft"
+        }
+
+         // eslint-disable-next-line
+        else if(queueId == 450){
+            return "ARAM"
+        }
+
+
+        // eslint-disable-next-line
+        else if(queues[i]["queueId"] == queueId){ // if it's not a regular gamemode, print the description instead
+            return queues[i]["description"]
+        }
+    }
+
+    return "Unknown gametype"
+
+}
+
+var queues = [
     {
         "queueId": 0,
         "map": "Custom games",

@@ -5,24 +5,31 @@ import "./styles/UserStats.css"
 
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Image from "react-bootstrap/Image"
 
-import * as maps from '../resources/maps.json';
+import determineMap from "../resources/maps" //import mapdata
+import determineQueue from "../resources/queues"
+import determineChampion from "../resources/champion"
 
-//props.stats
+
+
+//*************************************************************************************** */
+
+
+
 const Match = props => (
     
-    <div>
+    <div className="container-fluid" style={props.stats["win"] ? {backgroundColor: '#99ffbb'} : {backgroundColor: "#ff9999"}}>
         <br/>
         <Row>
 
             <Col md={5}>
                 <Row>
-                    {props.stats["mapId"]}
-                    {maps[props.stats["mapId"]]}
+                    {determineMap(props.stats["mapId"])}
                 </Row>
 
                 <Row>
-                    {props.stats["champion"]}
+                    {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/champion/${determineChampion(props.stats["champion"])}.png`)}/>}
                 </Row>
 
                 <Row>
@@ -34,12 +41,12 @@ const Match = props => (
 
             <Col md={2}>
                 <Row>
-                    {props.stats["queueId"]}
+                    {determineQueue(props.stats["queueId"])}
                 </Row>
 
 
                 <Row>
-                    {"KDA:" + props.stats["kills"] + "/" + props.stats["deaths"] + "/" + props.stats["assists"]}    
+                    {props.stats["kills"] + "/" + props.stats["deaths"] + "/" + props.stats["assists"]}    
                 </Row>
                 
             </Col>
@@ -47,15 +54,25 @@ const Match = props => (
 
             <Col md={5}>
                 <Row>
-                    {props.stats["item0"] + " "}
-                    {props.stats["item1"] + " "}
-                    {props.stats["item2"]}
+                    <Col>
+                        <Row>
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item0"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item1"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item2"]}.png`)}/>}
+                        </Row>
+
+                        <Row>
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item3"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item4"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item5"]}.png`)}/>}
+                        </Row>
+                    </Col>
+
+                    <Col>
+                        {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item6"]}.png`)}/>}
+                    </Col>
                 </Row>
-                <Row>
-                    {props.stats["item3"] + " "}
-                    {props.stats["item4"] + " "}
-                    {props.stats["item5"] + " "}
-                </Row>
+
             </Col>
 
 
@@ -84,9 +101,9 @@ export default class UserStats extends Component {
             summonerId: "", //encryptedSummonerId
             summonerLevel: 0,   //in-game experience-based level rating
             soloRank: "",   // summoner solo/duo queue rank (eg. III)
-            soloTier: "Unranked",   //summoner solo/duo tier (eg. silver)
+            soloTier: "UNRANKED",   //summoner solo/duo tier (eg. silver)
             flexRank: "",   // summoner flex queue rank (eg. III)
-            flexTier: "Unranked",   //summoner flex queue tier (eg. silver)
+            flexTier: "UNRANKED",   //summoner flex queue tier (eg. silver)
             matches: [],    //array of objects of basic match data (used to prepare loading in match data)
             matchData: [],  //array of objects, each containing in-depth info of each recent match summoner has played. contains object
             
@@ -157,7 +174,7 @@ export default class UserStats extends Component {
             
             if(res.data["matches"].length >=5){
                     this.setState({
-                    matches: res.data["matches"].slice(0, 2), //get most recent 5 matches only (due to api rate limiting)
+                    matches: res.data["matches"].slice(0, 5), //get most recent 5 matches only (due to api rate limiting)
                 })
             }
             else{ //if user has played less than 5 games, store all of them in this.state.matches
@@ -243,7 +260,7 @@ export default class UserStats extends Component {
         return(
             <div>
 
-                <div className="summonerInfo">
+                <div className="summonerInfo container-fluid">
 
                     <Row>
                         <Col md={3}>
@@ -256,10 +273,12 @@ export default class UserStats extends Component {
                         
                         <Col md={3}>
                         Solo: {this.state.soloTier + " " + this.state.soloRank}
+                        <Image  className= "img-responsive" width="30%" src = {require(`../resources/img/ranked-emblems/${this.state.soloTier}.png`)} alt={this.state.soloTier}/>
                         </Col>
 
                         <Col md={3}>
                         Flex: {this.state.flexTier +  " " + this.state.flexRank}
+                        <Image className= "img-responsive" width="30%" src = {require(`../resources/img/ranked-emblems/${this.state.flexTier}.png`)} alt={this.state.flexTier}/>
                         </Col>
                         
                     </Row>

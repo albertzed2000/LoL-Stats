@@ -1,4 +1,16 @@
-[
+
+export default function determineMap(mapId){
+    //check which map a summoner is playing on
+
+    for(let i = 0; i < maps.length; i++){
+        // eslint-disable-next-line
+        if (maps[i]["mapId"] == mapId){
+            return maps[i]["mapName"]
+        }
+    }
+}
+
+var maps = [
     {
         "mapId": 1,
         "mapName": "Summoner's Rift",
