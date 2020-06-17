@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import axios from "axios";
 
+import "./styles/UserStats.css"
+
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 const Match = props => (
     <div>
       {props.stats["kills"]}
@@ -163,15 +167,33 @@ export default class UserStats extends Component {
     render(){
 
         return(
-        <div>
-        {this.state.username} <br/>
-        {this.state.foundUser}<br/>
-        Level: {this.state.summonerLevel}<br/>
-        Flex rank: {this.state.flexTier +  " " + this.state.flexRank}<br/>
-        Solo/duo rank: {this.state.soloTier + " " + this.state.soloRank}<br/>
-        
-        {this.matchList()}
-        </div>
+            <div>
+
+                <div className="summonerInfo">
+
+                    <Row>
+                        <Col md={2}>
+                            Lv: {this.state.summonerLevel}
+                        </Col>
+
+                        <Col md={6}>
+                            {this.state.username}
+                        </Col>
+                        
+                        <Col md={2}>
+                        Solo: {this.state.soloTier + " " + this.state.soloRank}
+                        </Col>
+
+                        <Col md={2}>
+                        Flex: {this.state.flexTier +  " " + this.state.flexRank}
+                        </Col>
+                        
+                    </Row>
+                </div>
+
+
+                {this.matchList()}
+            </div>
 
         )
     }
