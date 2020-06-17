@@ -8,9 +8,11 @@ import Col from "react-bootstrap/Col";
 
 //props.stats
 const Match = props => (
+    
     <div>
             
         <Row>
+
             <Col md={5}>
                 <Row>
                     {props.stats["mapId"]}
@@ -21,13 +23,14 @@ const Match = props => (
                 </Row>
 
                 <Row>
-                    {props.stats["duration"]}
+                    {Math.floor(props.stats["duration"] / 60).toString() + ":" + (props.stats["duration"] - (Math.floor(props.stats["duration"] / 60) * 60)).toString()}
+                    
                 </Row>
             </Col>
 
 
             <Col md={2}>
-                {"KDA:" + props.stats["kills"] + "/" + props.stats["deaths"] + "/" + props.stats["deaths"]}
+                {"KDA:" + props.stats["kills"] + "/" + props.stats["deaths"] + "/" + props.stats["assists"]}
             </Col>
 
 
@@ -143,7 +146,7 @@ export default class UserStats extends Component {
             
             if(res.data["matches"].length >=5){
                     this.setState({
-                    matches: res.data["matches"].slice(0, 1), //get most recent 5 matches only (due to api rate limiting)
+                    matches: res.data["matches"].slice(0, 2), //get most recent 5 matches only (due to api rate limiting)
                 })
             }
             else{ //if user has played less than 5 games, store all of them in this.state.matches
@@ -199,8 +202,6 @@ export default class UserStats extends Component {
                             "item5": participant["stats"]["item5"],
                             "item6": participant["stats"]["item6"],
                         };
-                        console.log(tempPlayerStats);
-                        console.log(tempMatchData);
                         console.log({...tempMatchData, ...tempPlayerStats});
                         this.setState({
                             matchData: this.state.matchData.concat([{...tempMatchData, ...tempPlayerStats}])
@@ -222,7 +223,7 @@ export default class UserStats extends Component {
         //returns styled matchList components for each match
 
         return this.state.matchData.map(singleMatchData => {
-          return <Match stats={singleMatchData} />;
+          return <Match stats={singleMatchData} key={singleMatchData["matchId"]}/>;
         })
       }
 
