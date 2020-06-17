@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import axios from "axios";
 
-
+const Match = props => (
+    <div>
+      {props.stats["kills"]}
+    </div>
+  )
 
 export default class UserStats extends Component {
 
@@ -148,6 +152,14 @@ export default class UserStats extends Component {
         console.log(this.state.matches); //debugging purposes
     }
 
+    matchList() {
+        //returns styled matchList components for each match
+
+        return this.state.matchData.map(singleMatchData => {
+          return <Match stats={singleMatchData} />;
+        })
+      }
+
     render(){
 
         return(
@@ -155,10 +167,10 @@ export default class UserStats extends Component {
         {this.state.username} <br/>
         {this.state.foundUser}<br/>
         Level: {this.state.summonerLevel}<br/>
-        {this.state.accountId}<br/>
-        {this.state.summonerId}<br/>
         Flex rank: {this.state.flexTier +  " " + this.state.flexRank}<br/>
         Solo/duo rank: {this.state.soloTier + " " + this.state.soloRank}<br/>
+        
+        {this.matchList()}
         </div>
 
         )
