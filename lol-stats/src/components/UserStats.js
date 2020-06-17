@@ -6,16 +6,19 @@ import "./styles/UserStats.css"
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
+import * as maps from '../resources/maps.json';
+
 //props.stats
 const Match = props => (
     
     <div>
-            
+        <br/>
         <Row>
 
             <Col md={5}>
                 <Row>
                     {props.stats["mapId"]}
+                    {maps[props.stats["mapId"]]}
                 </Row>
 
                 <Row>
@@ -30,7 +33,15 @@ const Match = props => (
 
 
             <Col md={2}>
-                {"KDA:" + props.stats["kills"] + "/" + props.stats["deaths"] + "/" + props.stats["assists"]}
+                <Row>
+                    {props.stats["queueId"]}
+                </Row>
+
+
+                <Row>
+                    {"KDA:" + props.stats["kills"] + "/" + props.stats["deaths"] + "/" + props.stats["assists"]}    
+                </Row>
+                
             </Col>
 
 
@@ -56,7 +67,7 @@ const Match = props => (
 
 
 
-
+    <br/>
     </div>
   )
 
