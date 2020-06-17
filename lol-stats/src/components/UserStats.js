@@ -5,9 +5,55 @@ import "./styles/UserStats.css"
 
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
+//props.stats
 const Match = props => (
     <div>
-      {props.stats["kills"]}
+            
+        <Row>
+            <Col md={5}>
+                <Row>
+                    {props.stats["mapId"]}
+                </Row>
+
+                <Row>
+                    {props.stats["champion"]}
+                </Row>
+
+                <Row>
+                    {props.stats["duration"]}
+                </Row>
+            </Col>
+
+
+            <Col md={2}>
+                {"KDA:" + props.stats["kills"] + "/" + props.stats["deaths"] + "/" + props.stats["deaths"]}
+            </Col>
+
+
+            <Col md={5}>
+                <Row>
+                    {props.stats["item0"] + " "}
+                    {props.stats["item1"] + " "}
+                    {props.stats["item2"]}
+                </Row>
+                <Row>
+                    {props.stats["item3"] + " "}
+                    {props.stats["item4"] + " "}
+                    {props.stats["item5"] + " "}
+                </Row>
+            </Col>
+
+
+
+
+
+
+        </Row>
+
+
+
+
     </div>
   )
 
