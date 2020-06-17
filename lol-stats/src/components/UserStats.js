@@ -70,9 +70,9 @@ export default class UserStats extends Component {
             summonerId: "", //encryptedSummonerId
             summonerLevel: 0,   //in-game experience-based level rating
             soloRank: "",   // summoner solo/duo queue rank (eg. III)
-            soloTier: "",   //summoner solo/duo tier (eg. silver)
+            soloTier: "Unranked",   //summoner solo/duo tier (eg. silver)
             flexRank: "",   // summoner flex queue rank (eg. III)
-            flexTier: "",   //summoner flex queue tier (eg. silver)
+            flexTier: "Unranked",   //summoner flex queue tier (eg. silver)
             matches: [],    //array of objects of basic match data (used to prepare loading in match data)
             matchData: [],  //array of objects, each containing in-depth info of each recent match summoner has played. contains object
             
@@ -108,12 +108,28 @@ export default class UserStats extends Component {
         await axios.get("https://m6m1r9620d.execute-api.us-west-2.amazonaws.com/rgapi/rank/na1/" + this.state.summonerId)
         .then(res => {
             console.log(res.data[0]);
-            this.setState({
-                flexTier: res.data[0]["tier"],
-                flexRank: res.data[0]["rank"],
-                soloTier: res.data[1]["tier"],
-                soloRank: res.data[0]["rank"],
+
+
+            res.data.forEach((rankInfo)=>{
+                //checks if player is ranked, and updates their rank if so
+
+                // eslint-disable-next-line
+                if (rankInfo["queueType"] == "RANKED_SOLO_5x5"){
+                    this.setState({
+                        soloTier: rankInfo["tier"],
+                        soloRank: rankInfo["rank"],
+                    })
+                }
+
+                // eslint-disable-next-line
+                else if(rankInfo["queueType"] == "RANKED_FLEX_SR"){
+                    this.setState({
+                        flexTier: rankInfo["tier"],
+                        flexRank: rankInfo["rank"],
+                    })
+                }
             })
+            
         })
         .catch((err) => {
             console.log(err);
@@ -218,19 +234,19 @@ export default class UserStats extends Component {
                 <div className="summonerInfo">
 
                     <Row>
-                        <Col md={2}>
+                        <Col md={3}>
                             Lv: {this.state.summonerLevel}
                         </Col>
 
-                        <Col md={6}>
+                        <Col md={3}>
                             {this.state.username}
                         </Col>
                         
-                        <Col md={2}>
+                        <Col md={3}>
                         Solo: {this.state.soloTier + " " + this.state.soloRank}
                         </Col>
 
-                        <Col md={2}>
+                        <Col md={3}>
                         Flex: {this.state.flexTier +  " " + this.state.flexRank}
                         </Col>
                         
