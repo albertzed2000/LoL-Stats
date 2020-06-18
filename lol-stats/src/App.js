@@ -11,14 +11,16 @@ class App extends React.Component {
   
   render(){
     return (
-      <Router>
-        <div className="container">
+        
 
-        <Route path="/" exact component={IndexPage} />
-        <Route path="/user-not-found" component={UserNotFound} />
-        <Route path="/user/:username" component={UserStats} />
-        </div>
-      </Router>
+        <Router>
+          <div className="container">
+            
+            <Route path="/" exact component={IndexPage} />
+            <Route path="/user-not-found" component={UserNotFound} />
+            <Route path="/user/:username" component={UserStats} />
+          </div>
+        </Router>
     );
   }
 }

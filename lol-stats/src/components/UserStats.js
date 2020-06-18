@@ -48,6 +48,10 @@ const Match = props => (
                     {Math.floor(props.stats["duration"] / 60).toString() + ":" + (props.stats["duration"] - (Math.floor(props.stats["duration"] / 60) * 60)).toString()}
                     
                 </Row>
+
+                <Row>
+                    {props.stats["time"]}
+                </Row>
             </Col>
 
 
@@ -203,11 +207,19 @@ export default class UserStats extends Component {
             .then(res => {
                 console.log(res.data); //debugging purposes
                 
+                let date = new Date(match["timestamp"]);
+                let month = "0" + date.getMonth();
+                let day = "0" + date.getDay();
+                let hours = date.getHours();
+                let minutes = "0" + date.getMinutes();
+                //determine when the game started
+                let formattedTime = month.substr(-2) + "/" + day.substr(-2) + " " +  hours + ':' + minutes.substr(-2);
+
                 let tempMatchData = { //store general game data here
                     "region": match["platformId"], //string region
                     "matchId": match["gameId"], // string match id
                     "champion": match["champion"], // int champion that our summoner picked
-                    "timestamp": match["timestamp"], //int unix gamestart timestamp
+                    "time": formattedTime, //time at which game started
                     "duration": res.data["gameDuration"], //int, how long the game lasted in seconds, counted from 0:00 (gamestart)
                     "queueId": res.data["queueId"], //int, matchtype id
                     "mapId": res.data["mapId"], // int, map id that was played on 
