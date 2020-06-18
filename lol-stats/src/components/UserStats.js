@@ -10,7 +10,7 @@ import Image from "react-bootstrap/Image"
 import determineMap from "../resources/maps" //import mapdata
 import determineQueue from "../resources/queues"
 import determineChampion from "../resources/champion"
-
+import determineSummonerSpell from "../resources/summonerSpells"
 
 
 //*************************************************************************************** */
@@ -23,13 +23,25 @@ const Match = props => (
         <br/>
         <Row>
 
-            <Col md={5}>
+            <Col md={4}>
                 <Row>
                     {determineMap(props.stats["mapId"])}
                 </Row>
 
                 <Row>
-                    {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/champion/${determineChampion(props.stats["champion"])}.png`)}/>}
+                    <Col>
+                        {<Image  className= "img-responsive" width="40%" src = {require(`../resources/img/champion/${determineChampion(props.stats["champion"])}.png`)}/>}
+                    </Col>
+
+                    <Col>
+                        <Row>
+                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/summoner-spells/${determineSummonerSpell(props.stats["spell1Id"])}.png`)}/>}
+                        </Row>
+
+                        <Row>
+                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/summoner-spells/${determineSummonerSpell(props.stats["spell2Id"])}.png`)}/>}
+                        </Row>
+                    </Col>
                 </Row>
 
                 <Row>
@@ -39,7 +51,7 @@ const Match = props => (
             </Col>
 
 
-            <Col md={2}>
+            <Col md={4}>
                 <Row>
                     {determineQueue(props.stats["queueId"])}
                 </Row>
@@ -52,24 +64,21 @@ const Match = props => (
             </Col>
 
 
-            <Col md={5}>
+            <Col md={4}>
                 <Row>
                     <Col>
                         <Row>
-                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item0"]}.png`)}/>}
-                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item1"]}.png`)}/>}
-                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item2"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item0"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item1"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item2"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item6"]}.png`)}/>}
                         </Row>
 
                         <Row>
-                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item3"]}.png`)}/>}
-                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item4"]}.png`)}/>}
-                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item5"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item3"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item4"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item5"]}.png`)}/>}
                         </Row>
-                    </Col>
-
-                    <Col>
-                        {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item6"]}.png`)}/>}
                     </Col>
                 </Row>
 
@@ -106,9 +115,11 @@ export default class UserStats extends Component {
             flexTier: "UNRANKED",   //summoner flex queue tier (eg. silver)
             matches: [],    //array of objects of basic match data (used to prepare loading in match data)
             matchData: [],  //array of objects, each containing in-depth info of each recent match summoner has played. contains object
-            
+            summonerIconId: 0,
 
         }
+
+        this.matchList = this.matchList.bind(this);
     }
 
     async componentDidMount(){
@@ -122,8 +133,9 @@ export default class UserStats extends Component {
                 foundUser: true, //set founduser to true
                 accountId: res.data["accountId"], //set accountId based on response
                 summonerLevel: res.data["summonerLevel"], //set summonerLevel based on response
-                summonerId: res.data["id"] //set summonerId based on response
-                }); //set state to accountId
+                summonerId: res.data["id"], //set summonerId based on response
+                summonerIconId: res.data["profileIconId"]
+                }); 
         })
         .catch((err) => {
             console.log(err); //debugging purposes
@@ -174,7 +186,7 @@ export default class UserStats extends Component {
             
             if(res.data["matches"].length >=5){
                     this.setState({
-                    matches: res.data["matches"].slice(0, 5), //get most recent 5 matches only (due to api rate limiting)
+                    matches: res.data["matches"].slice(0, 1), //get most recent 5 matches only (due to api rate limiting)
                 })
             }
             else{ //if user has played less than 5 games, store all of them in this.state.matches
@@ -205,13 +217,14 @@ export default class UserStats extends Component {
                 var tempParticipantId = 0;
                 //loop through participantIdentities and find our player
                 res.data["participantIdentities"].forEach((participantIdentity) => {
-                    if(participantIdentity["player"]["summonerName"] === this.state.username){ //check if we have found our summoner
+                    if(participantIdentity["player"]["summonerName"].toLowerCase() === this.state.username.toLowerCase()){ //check if we have found our summoner
                         console.log("found our summoner with username" + participantIdentity["player"]["summonerName"] + "and participantId " + participantIdentity["participantId"]) //debugging purposes
                         tempParticipantId = participantIdentity["participantId"]; // set player's participantId
                     }
                 });
 
                 //note: "summoner" and "player" terms are the same.
+
                 //loop through participant stats, record stats if it is our summoner
                 res.data["participants"].forEach((participant) => {
                     if(participant["participantId"] === tempParticipantId){ // check if we have found our player
@@ -229,6 +242,8 @@ export default class UserStats extends Component {
                             "item4": participant["stats"]["item4"],
                             "item5": participant["stats"]["item5"],
                             "item6": participant["stats"]["item6"],
+                            "spell1Id": participant["spell1Id"],
+                            "spell2Id": participant["spell2Id"],
                         };
                         console.log({...tempMatchData, ...tempPlayerStats});
                         this.setState({
@@ -249,14 +264,14 @@ export default class UserStats extends Component {
 
     matchList() {
         //returns styled matchList components for each match
-
+        console.log(this.state.matchData);//debugging purposes
         return this.state.matchData.map(singleMatchData => {
           return <Match stats={singleMatchData} key={singleMatchData["matchId"]}/>;
         })
+
       }
 
     render(){
-
         return(
             <div>
 
@@ -264,7 +279,14 @@ export default class UserStats extends Component {
 
                     <Row>
                         <Col md={3}>
-                            Lv: {this.state.summonerLevel}
+
+                            <Row>
+                                {<Image  className= "img-responsive" width="25%" src = {require(`../resources/img/profileicon/${this.state.summonerIconId.toString()}.png`)}/>}
+                            </Row>
+
+                            <Row>
+                                Lv: {this.state.summonerLevel}
+                            </Row>
                         </Col>
 
                         <Col md={3}>

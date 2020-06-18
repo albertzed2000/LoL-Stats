@@ -1,6 +1,7 @@
 export default function(champId){
     //determine the champion by id
-    let tempChampId = "Aatrox"
+
+    let tempChampId = "Aatrox" // default champ to Aatrox
     Object.keys(champions["data"]).forEach((champ) => {
 
          // eslint-disable-next-line
