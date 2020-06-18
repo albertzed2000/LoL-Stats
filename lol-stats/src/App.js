@@ -11,7 +11,7 @@ class App extends React.Component {
   
   render(){
     return (
-        <div className='whole'>
+        <div className='whole indexOmbreBottom'>
 
         <Router>
           <div className="container">
@@ -21,6 +21,8 @@ class App extends React.Component {
             <Route path="/user/:username" component={UserStats} />
           </div>
         </Router>
+
+
         </div>
     );
   }

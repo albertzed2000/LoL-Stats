@@ -3,7 +3,7 @@
 .big404 {
 
     font-size: 15vw;
-    color: orange;
+    color:  #ff9900;
 
 
 
@@ -23,4 +23,25 @@
   background-color: #ffb366;
 
 
+}
+
+.indexWhole{
+
+  text-align: center;
+}
+
+.indexBigWords{
+  font-size: 10vw;
+  color:  #ff9900;
+}
+
+.indexOmbreBottom{
+  background: rgba(255,230,242,1);
+  background: -moz-linear-gradient(top, rgba(255,230,242,1) 0%, rgba(255,230,242,1) 49%, rgba(255,153,0,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,230,242,1)), color-stop(49%, rgba(255,230,242,1)), color-stop(100%, rgba(255,153,0,1)));
+  background: -webkit-linear-gradient(top, rgba(255,230,242,1) 0%, rgba(255,230,242,1) 49%, rgba(255,153,0,1) 100%);
+  background: -o-linear-gradient(top, rgba(255,230,242,1) 0%, rgba(255,230,242,1) 49%, rgba(255,153,0,1) 100%);
+  background: -ms-linear-gradient(top, rgba(255,230,242,1) 0%, rgba(255,230,242,1) 49%, rgba(255,153,0,1) 100%);
+  background: linear-gradient(to bottom, rgba(255,230,242,1) 0%, rgba(255,230,242,1) 49%, rgba(255,153,0,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe6f2', endColorstr='#ff9900', GradientType=0 );
 }
