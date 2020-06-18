@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
 import LargeSearchBar from "./largeSearchBar";
 import IndexCarousel from "./IndexCarousel";
+import "bootstrap/dist/css/bootstrap.min.css"
+
+
 export default class IndexPage extends Component {
 
     render(){
         return(
 
-            <div className="indexWhole">
+            <div className="indexWhole container-fluid">
                 <div className="indexBigWords">
-                    LoL Stats
+                    LoL Statsasdfgthrngbfgetyhgfetrhfdr
 
                 </div>
                 <IndexCarousel/>

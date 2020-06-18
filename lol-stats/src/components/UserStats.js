@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from "axios";
 
 import "../App.css"
+import "bootstrap/dist/css/bootstrap.min.css"
 
 import Navi from "./navi"
 import Row from "react-bootstrap/Row";
@@ -24,65 +25,79 @@ const Match = props => (
         <br/>
         <Row>
 
-            <Col md={4}>
+            <Col md={3}>
+
+
+                <Row>
+                    <Col md={8}>
+                        {<Image  className= "img-responsive" width="50%" src = {require(`../resources/img/champion/${determineChampion(props.stats["champion"])}.png`)}/>}
+                    </Col>
+
+                    <Col md={4}>
+                        <Row>
+                            {<Image  className= "img-responsive" width="40%" src = {require(`../resources/img/summoner-spells/${determineSummonerSpell(props.stats["spell1Id"])}.png`)}/>}
+                        </Row>
+
+                        <Row>
+                            {<Image  className= "img-responsive" width="40%" src = {require(`../resources/img/summoner-spells/${determineSummonerSpell(props.stats["spell2Id"])}.png`)}/>}
+                        </Row>
+                    </Col>
+                </Row>
+
+
+
+
+            </Col>
+
+            <Col md={3}>
                 <Row>
                     {determineMap(props.stats["mapId"])}
                 </Row>
 
                 <Row>
-                    <Col>
-                        {<Image  className= "img-responsive" width="40%" src = {require(`../resources/img/champion/${determineChampion(props.stats["champion"])}.png`)}/>}
-                    </Col>
-
-                    <Col>
-                        <Row>
-                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/summoner-spells/${determineSummonerSpell(props.stats["spell1Id"])}.png`)}/>}
-                        </Row>
-
-                        <Row>
-                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/summoner-spells/${determineSummonerSpell(props.stats["spell2Id"])}.png`)}/>}
-                        </Row>
-                    </Col>
+                    {determineChampion(props.stats["champion"])}
                 </Row>
 
                 <Row>
                     {Math.floor(props.stats["duration"] / 60).toString() + ":" + (props.stats["duration"] - (Math.floor(props.stats["duration"] / 60) * 60)).toString()}
-                    
                 </Row>
 
                 <Row>
                     {props.stats["time"]}
                 </Row>
+
             </Col>
 
+            <Col md={3}>
+                <div className="queueType">
+                    <Row>
+                        {determineQueue(props.stats["queueId"])}
+                    </Row>
+                </div>
 
-            <Col md={4}>
-                <Row>
-                    {determineQueue(props.stats["queueId"])}
-                </Row>
-
-
-                <Row>
-                    {props.stats["kills"] + "/" + props.stats["deaths"] + "/" + props.stats["assists"]}    
-                </Row>
+                <div className="killDeathAssist">
+                    <Row>
+                        {props.stats["kills"] + "/" + props.stats["deaths"] + "/" + props.stats["assists"]}    
+                    </Row>
+                </div>
                 
             </Col>
 
 
-            <Col md={4}>
+            <Col md={3}>
                 <Row>
                     <Col>
                         <Row>
-                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item0"]}.png`)}/>}
-                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item1"]}.png`)}/>}
-                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item2"]}.png`)}/>}
-                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item6"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item0"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item1"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item2"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item6"]}.png`)}/>}
                         </Row>
 
                         <Row>
-                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item3"]}.png`)}/>}
-                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item4"]}.png`)}/>}
-                            {<Image  className= "img-responsive" width="20%" src = {require(`../resources/img/item/${props.stats["item5"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item3"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item4"]}.png`)}/>}
+                            {<Image  className= "img-responsive" width="15%" src = {require(`../resources/img/item/${props.stats["item5"]}.png`)}/>}
                         </Row>
                     </Col>
                 </Row>
@@ -292,28 +307,41 @@ export default class UserStats extends Component {
 
                     <Row>
                         <Col md={3}>
-
-                            <Row>
-                                {<Image  className= "img-responsive" width="25%" src = {require(`../resources/img/profileicon/${this.state.summonerIconId.toString()}.png`)}/>}
-                            </Row>
-
-                            <Row>
-                                Lv: {this.state.summonerLevel}
-                            </Row>
+                            {<Image  className= "img-responsive" height="100%" src = {require(`../resources/img/profileicon/${this.state.summonerIconId.toString()}.png`)}/>}
                         </Col>
 
                         <Col md={3}>
-                            {this.state.username}
+                            <Row>
+                                <div className="displayUsername">
+                                    {this.state.username}
+                                </div>
+                            </Row>
+
+                            <Row>
+                                Level {" " + this.state.summonerLevel}
+                            </Row>
                         </Col>
                         
                         <Col md={3}>
-                        Solo: {this.state.soloTier + " " + this.state.soloRank}
-                        <Image  className= "img-responsive" width="30%" src = {require(`../resources/img/ranked-emblems/${this.state.soloTier}.png`)} alt={this.state.soloTier}/>
+                            <Row>
+                                <Image  className= "img-responsive" width="30%" src = {require(`../resources/img/ranked-emblems/${this.state.soloTier}.png`)} alt={this.state.soloTier}/>
+                            </Row>
+
+                            <Row>
+                            {this.state.soloTier + " " + this.state.soloRank} SOLO
+                            </Row>
+                        
                         </Col>
 
                         <Col md={3}>
-                        Flex: {this.state.flexTier +  " " + this.state.flexRank}
-                        <Image className= "img-responsive" width="30%" src = {require(`../resources/img/ranked-emblems/${this.state.flexTier}.png`)} alt={this.state.flexTier}/>
+
+                            <Row>
+                                <Image className= "img-responsive" width="30%" src = {require(`../resources/img/ranked-emblems/${this.state.flexTier}.png`)} alt={this.state.flexTier}/>
+                            </Row>
+
+                            <Row>
+                                {this.state.flexTier +  " " + this.state.flexRank + " "} FLEX
+                            </Row>
                         </Col>
                         
                     </Row>
