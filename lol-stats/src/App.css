@@ -61,3 +61,46 @@
   font-size: 3vw;
   font-family: 'Roboto';
 }
+
+
+
+
+.aboutWhole{
+  text-align: center;
+}
+
+.about-text-all{
+  padding: 5vw 10vw 0vw 10vw;
+}
+
+.about-big-words{
+  font-size: 10vw;
+  
+
+}
+
+.about-sub-big-words{
+  font-size: 4vw;
+
+}
+
+.about-blurb1{
+  font-size: 2vw;
+}
+
+.aboutWhy{
+  font-size: 6vw;
+  
+}
+
+.aboutWhyBlurb{
+  font-size: 2vw;
+}
+
+.aboutHow{
+  font-size: 6vw;
+}
+
+.aboutHowBlurb{
+  font-size: 2vw;
+}

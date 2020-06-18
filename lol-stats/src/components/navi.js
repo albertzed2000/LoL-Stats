@@ -20,6 +20,7 @@ export default class Navi extends Component {
 
                 <Nav className="mr-auto">
                     <Nav.Link  className="nav-text" href="/">Home</Nav.Link>
+                    <Nav.Link  className="nav-text" href="/about">About</Nav.Link>
 
                 </Nav>
                 <Nav>
