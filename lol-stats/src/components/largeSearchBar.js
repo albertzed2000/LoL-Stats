@@ -67,7 +67,7 @@ export default class LargeSearchBar extends Component {
             <div>
                 <form className="form-group form-group-lg" onSubmit={this.onSubmit}>
                 <label>
-                    <input className="form-control input-lg" id="inputlg" type="text" onChange={this.onChangeUser}/>
+                    <input className="form-control input-lg" placeholder="Username" id="inputlg" type="text" onChange={this.onChangeUser}/>
                 </label>
 
                 <input className="input-sm" id="inputsm" type="submit" value="Go!" />

@@ -66,11 +66,10 @@ export default class SearchBar extends Component {
             <div>
                 <form onSubmit={this.onSubmit}>
                 <label>
-                    Username:
-                    <input type="text" onChange={this.onChangeUser}/>
+                    <input type="text" onChange={this.onChangeUser} placeholder="Username"/>
                 </label>
 
-                <input type="submit" value="Submit" />
+                <input type="submit" value="Go!" />
                 </form>
 
             </div>

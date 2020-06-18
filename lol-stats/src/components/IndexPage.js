@@ -11,7 +11,7 @@ export default class IndexPage extends Component {
 
             <div className="indexWhole container-fluid">
                 <div className="indexBigWords">
-                    LoL Statsasdfgthrngbfgetyhgfetrhfdr
+                    LoL Stats
 
                 </div>
                 <IndexCarousel/>
