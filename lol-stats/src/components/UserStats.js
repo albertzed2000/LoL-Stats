@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import axios from "axios";
 
-import "./styles/UserStats.css"
+import "../App.css"
 
+import Navi from "./navi"
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image"
@@ -286,7 +287,7 @@ export default class UserStats extends Component {
     render(){
         return(
             <div>
-
+                <Navi/>
                 <div className="summonerInfo container-fluid">
 
                     <Row>
@@ -320,6 +321,11 @@ export default class UserStats extends Component {
 
 
                 {this.matchList()}
+                <br/><br/><br/><br/>
+                <br/><br/><br/><br/>
+                <br/><br/><br/><br/>
+                <br/><br/><br/><br/>
+                <br/><br/><br/><br/>
             </div>
 
         )

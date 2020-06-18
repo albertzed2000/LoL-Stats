@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import Navi from "./navi";
-
+import LargeSearchBar from "./largeSearchBar";
+import "../App.css"
 
 
 export default class UserNotFound extends Component {
@@ -12,9 +13,18 @@ export default class UserNotFound extends Component {
 
         return(
 
-            <div>
+            <div className="pageContent">
                 <Navi/>
-                Sorry! This user doesn't exist! Try again.
+
+                <div className="big404">
+                    404
+                </div>
+                Sorry! The username could not be found. Try again!
+                <br/><br/><br/><br/>
+                <LargeSearchBar/>
+                <br/><br/><br/><br/>
+                <br/><br/><br/><br/>
+                <br/><br/>
             </div>
         )
     }
