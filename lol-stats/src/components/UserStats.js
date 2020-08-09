@@ -206,7 +206,7 @@ export default class UserStats extends Component {
             
             if(res.data["matches"].length >=5){
                     this.setState({
-                    matches: res.data["matches"].slice(0, 1), //get most recent 5 matches only (due to api rate limiting)
+                    matches: res.data["matches"].slice(0, 6), //get most recent 5 matches only (due to api rate limiting)
                 })
             }
             else{ //if user has played less than 5 games, store all of them in this.state.matches
@@ -260,6 +260,7 @@ export default class UserStats extends Component {
 
                         let tempPlayerStats = { // store playerStats
                             "win": participant["stats"]["win"],
+                            "userName": this.state.username,
                             "kills": participant["stats"]["kills"],
                             "deaths": participant["stats"]["deaths"],
                             "assists": participant["stats"]["assists"],
