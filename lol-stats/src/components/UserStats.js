@@ -135,6 +135,7 @@ export default class UserStats extends Component {
             flexTier: "UNRANKED",   //summoner flex queue tier (eg. silver)
             matches: [],    //array of objects of basic match data (used to prepare loading in match data)
             matchData: [],  //array of objects, each containing in-depth info of each recent match summoner has played. contains object
+            dbMatchData: [],
             summonerIconId: 0,
 
         }
@@ -199,7 +200,7 @@ export default class UserStats extends Component {
         })
 
 
-        //get match history of players
+        //get match history of player
         await axios.get('https://m6m1r9620d.execute-api.us-west-2.amazonaws.com/rgapi/matchlist/na1/' + this.state.accountId)
         .then(res => {
             console.log(res.data["matches"][0]["platformId"]); //for debugging purposes
@@ -216,77 +217,102 @@ export default class UserStats extends Component {
             }
         })
 
+        //get available match data from our own database
+        await axios.get('https://radiant-plateau-97440.herokuapp.com/matches/find/byUser/'
+         + this.state.username + "/" + this.state.matches[this.state.matches.length - 1]["gameId"])
+         .then(res => {
+             this.setState({dbMatchData: res.data["matches"]})
+         })
+         .catch(err => console.log(err))
+
+
+
 
         //retrieve match info for each match inside this.state.matches
+        // TODO: retrieve match info for this.state.newmatches only. match data provided by our database
         await this.state.matches.forEach((match) => {
-            axios.get('https://m6m1r9620d.execute-api.us-west-2.amazonaws.com/rgapi/match/na1/' + match["gameId"])
-            .then(res => {
-                console.log(res.data); //debugging purposes
-                
-                let date = new Date(match["timestamp"]);
-                let month = "0" + date.getMonth();
-                let day = "0" + date.getDay();
-                let hours = date.getHours();
-                let minutes = "0" + date.getMinutes();
-                //determine when the game started
-                let formattedTime = month.substr(-2) + "/" + day.substr(-2) + " " +  hours + ':' + minutes.substr(-2);
 
-                let tempMatchData = { //store general game data here
-                    "region": match["platformId"], //string region
-                    "matchId": match["gameId"], // string match id
-                    "champion": match["champion"], // int champion that our summoner picked
-                    "time": formattedTime, //time at which game started
-                    "duration": res.data["gameDuration"], //int, how long the game lasted in seconds, counted from 0:00 (gamestart)
-                    "queueId": res.data["queueId"], //int, matchtype id
-                    "mapId": res.data["mapId"], // int, map id that was played on 
+            //check if we already have data for this match in this.state.dbMatchdata - skip over Riot API call if we do.
+            let dataFound = false;
+            for(let j = 0; j < this.state.dbMatchData.length; j++){
+                if (this.state.dbMatchData[j]["matchId"] === match["gameId"]){
+                    dataFound = true;
                 }
+            }
 
+            if(!dataFound){
+                axios.get('https://m6m1r9620d.execute-api.us-west-2.amazonaws.com/rgapi/match/na1/' + match["gameId"])
+                .then(res => {
+                    console.log(res.data); //debugging purposes
+                    
+                    let date = new Date(match["timestamp"]);
+                    let month = "0" + date.getMonth();
+                    let day = "0" + date.getDay();
+                    let hours = date.getHours();
+                    let minutes = "0" + date.getMinutes();
+                    //determine when the game started
+                    let formattedTime = month.substr(-2) + "/" + day.substr(-2) + " " +  hours + ':' + minutes.substr(-2);
 
-                var tempParticipantId = 0;
-                //loop through participantIdentities and find our player
-                res.data["participantIdentities"].forEach((participantIdentity) => {
-                    if(participantIdentity["player"]["summonerName"].toLowerCase() === this.state.username.toLowerCase()){ //check if we have found our summoner
-                        console.log("found our summoner with username" + participantIdentity["player"]["summonerName"] + "and participantId " + participantIdentity["participantId"]) //debugging purposes
-                        tempParticipantId = participantIdentity["participantId"]; // set player's participantId
+                    let tempMatchData = { //store general game data here
+                        "region": match["platformId"], //string region
+                        "matchId": match["gameId"], // string match id
+                        "champion": match["champion"], // int champion that our summoner picked
+                        "time": formattedTime, //time at which game started
+                        "duration": res.data["gameDuration"], //int, how long the game lasted in seconds, counted from 0:00 (gamestart)
+                        "queueId": res.data["queueId"], //int, matchtype id
+                        "mapId": res.data["mapId"], // int, map id that was played on 
                     }
-                });
-
-                //note: "summoner" and "player" terms are the same.
-
-                //loop through participant stats, record stats if it is our summoner
-                res.data["participants"].forEach((participant) => {
-                    if(participant["participantId"] === tempParticipantId){ // check if we have found our player
-                        console.log("we found the player")//debugging purposes
-
-                        let tempPlayerStats = { // store playerStats
-                            "win": participant["stats"]["win"],
-                            "userName": this.state.username,
-                            "kills": participant["stats"]["kills"],
-                            "deaths": participant["stats"]["deaths"],
-                            "assists": participant["stats"]["assists"],
-                            "item0": participant["stats"]["item0"],
-                            "item1": participant["stats"]["item1"],
-                            "item2": participant["stats"]["item2"],
-                            "item3": participant["stats"]["item3"],
-                            "item4": participant["stats"]["item4"],
-                            "item5": participant["stats"]["item5"],
-                            "item6": participant["stats"]["item6"],
-                            "spell1Id": participant["spell1Id"],
-                            "spell2Id": participant["spell2Id"],
-                        };
-                        console.log({...tempMatchData, ...tempPlayerStats});
-                        this.setState({
-                            matchData: this.state.matchData.concat([{...tempMatchData, ...tempPlayerStats}])
-                        })
-                    }
-                });
 
 
-            })
-            .catch(err => console.log(err));
+                    var tempParticipantId = 0;
+                    //loop through participantIdentities and find our player
+                    res.data["participantIdentities"].forEach((participantIdentity) => {
+                        if(participantIdentity["player"]["summonerName"].toLowerCase() === this.state.username.toLowerCase()){ //check if we have found our summoner
+                            console.log("found our summoner with username" + participantIdentity["player"]["summonerName"] + "and participantId " + participantIdentity["participantId"]) //debugging purposes
+                            tempParticipantId = participantIdentity["participantId"]; // set player's participantId
+                        }
+                    });
+
+                    //note: "summoner" and "player" terms are the same.
+
+                    //loop through participant stats, record stats if it is our summoner
+                    res.data["participants"].forEach((participant) => {
+                        if(participant["participantId"] === tempParticipantId){ // check if we have found our player
+                            console.log("we found the player")//debugging purposes
+
+                            let tempPlayerStats = { // store playerStats
+                                "win": participant["stats"]["win"],
+                                "userName": this.state.username,
+                                "kills": participant["stats"]["kills"],
+                                "deaths": participant["stats"]["deaths"],
+                                "assists": participant["stats"]["assists"],
+                                "item0": participant["stats"]["item0"],
+                                "item1": participant["stats"]["item1"],
+                                "item2": participant["stats"]["item2"],
+                                "item3": participant["stats"]["item3"],
+                                "item4": participant["stats"]["item4"],
+                                "item5": participant["stats"]["item5"],
+                                "item6": participant["stats"]["item6"],
+                                "spell1Id": participant["spell1Id"],
+                                "spell2Id": participant["spell2Id"],
+                            };
+                            console.log({...tempMatchData, ...tempPlayerStats});
+                            this.setState({
+                                matchData: this.state.matchData.concat([{...tempMatchData, ...tempPlayerStats}])
+                            })
+                        }
+                    });
+
+
+                })
+                .catch(err => console.log(err));
+
+            }
+
             
         })
-        
+        axios.post("https://radiant-plateau-97440.herokuapp.com/matches/new/", {"matches": this.state.matchData})
+        .catch(err => console.log(err))
         
         console.log(this.state.matches); //debugging purposes
     }
@@ -299,6 +325,8 @@ export default class UserStats extends Component {
         })
 
       }
+    
+    
 
     render(){
         return(
